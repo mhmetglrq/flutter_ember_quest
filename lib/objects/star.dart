@@ -17,7 +17,7 @@ class Star extends SpriteComponent with HasGameReference<EmberQuestGame> {
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
 
   @override
-  void onLoad() {
+  Future<void> onLoad() async {
     final starImage = game.images.fromCache('star.png');
     sprite = Sprite(starImage);
     position = Vector2(
@@ -36,15 +36,15 @@ class Star extends SpriteComponent with HasGameReference<EmberQuestGame> {
         ),
       ),
     );
-    
   }
 
   @override
   void update(double dt) {
     velocity.x = game.objectSpeed;
     position += velocity * dt;
-    if (position.x < -size.x) removeFromParent();
+    if (position.x < -size.x || game.health <= 0) {
+      removeFromParent();
+    }
     super.update(dt);
   }
-  
 }

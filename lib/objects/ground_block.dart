@@ -21,12 +21,12 @@ class GroundBlock extends SpriteComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  void onLoad() {
+  Future<void> onLoad() async {
     final groundImage = game.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
     position = Vector2(
-      gridPosition.x * size.x + xOffset,
-      game.size.y - gridPosition.y * size.y,
+      (gridPosition.x * size.x) + xOffset,
+      game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
     if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
@@ -53,6 +53,9 @@ class GroundBlock extends SpriteComponent
       if (game.lastBlockKey == _blockKey) {
         game.lastBlockXPosition = position.x + size.x - 10;
       }
+    }
+    if (game.health <= 0) {
+      removeFromParent();
     }
 
     super.update(dt);
